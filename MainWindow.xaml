@@ -9,11 +9,59 @@
     <Window.Background>
         <ImageBrush ImageSource="/Resources/image.psd.png"/>
     </Window.Background>
+
+
+    <Border x:Name="brdFight" Background="#000" BorderBrush="#fff" BorderThickness="2" Opacity="0.95" MouseDown="brdFight_MouseDown"
+                CornerRadius="20" Margin="15" Padding="25" HorizontalAlignment="Center">
+        
+        <DockPanel Margin="30" LastChildFill="False">
+            
+            <TextBlock Text="BOSS NAME + TIMER" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="25"/>
+            
+            <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
+                <TextBlock Text="HP" Margin="10"/>
+                <ProgressBar x:Name="barHealth" Value="100" Foreground="#F00" Width="170" Height="30" Margin="10"/>
+                <TextBlock x:Name="txtHealth" Text="30/30" Margin="10"/>
+            </StackPanel>
+
+            <Border BorderBrush="#fff" BorderThickness="5" HorizontalAlignment="Center" Height="400" Width="400">
+                <Canvas Background="#000" MouseMove="cnvsFightArea_MouseMove" x:Name="cnvsFightArea" ClipToBounds="True" Cursor="None">
+                    
+                    <Rectangle x:Name="rectangleHero" Tag="Hero" Height="30" Width="30"
+                               RadiusX="20" RadiusY="20">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="/Resources/heart.png"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
+
+                    <Rectangle x:Name="Enemy" Fill="#0FF" Height="20" Width="20" Canvas.Left="0" Canvas.Top="100"/>
+
+                </Canvas>
+            </Border>
+
+        </DockPanel>
+    </Border>
+
+
+
     
     
-    <DockPanel>
+    
+    
+    <!--<Border HorizontalAlignment="Center" Margin="25" Opacity="0.9" Background="#000" >
+        <DockPanel LastChildFill="False">
 
-        <TextBlock Text="BOSS NAME + TIMER"/>
 
-    </DockPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" DockPanel.Dock="Bottom" Margin="25">
+            </StackPanel>
+
+            <Border BorderBrush="#FFF" BorderThickness="5" CornerRadius="1" Height="400" Width="400" Margin="25">
+                <Canvas x:Name="cnvsFightArea" ClipToBounds="True" MouseMove="cnvsFightArea_MouseMove" MouseEnter="cnvsFightArea_MouseMove"
+                         Height="400" Width="400">
+                    <Rectangle x:Name="rectangleHero" Fill="#FF0" Height="25" Width="25"/>
+                </Canvas>
+            </Border>
+
+        </DockPanel>
+    </Border>-->
 </Window>
