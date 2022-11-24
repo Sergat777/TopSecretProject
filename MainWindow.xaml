@@ -25,18 +25,8 @@
             </StackPanel>
 
             <Border BorderBrush="#fff" BorderThickness="5" HorizontalAlignment="Center" Height="400" Width="400">
-                <Canvas Background="#000" MouseMove="cnvsFightArea_MouseMove" x:Name="cnvsFightArea" ClipToBounds="True" Cursor="None">
-                    
-                    <Rectangle x:Name="rectangleHero" Tag="Hero" Height="30" Width="30"
-                               RadiusX="20" RadiusY="20">
-                        <Rectangle.Fill>
-                            <ImageBrush ImageSource="/Resources/heart.png"/>
-                        </Rectangle.Fill>
-                    </Rectangle>
-
-                    <Rectangle x:Name="Enemy" Fill="#0FF" Height="20" Width="20" Canvas.Left="0" Canvas.Top="100"/>
-
-                </Canvas>
+                <Canvas Background="#000" MouseMove="cnvsFightArea_MouseMove"
+                        x:Name="cnvsFightArea" ClipToBounds="True" Cursor="None"/>
             </Border>
 
         </DockPanel>

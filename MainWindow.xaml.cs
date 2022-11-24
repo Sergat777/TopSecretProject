@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GreatApparatusYebat.ProjectalesClasses;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using GreatApparatusYebat.Classes.ProjectalesClasses;
+using GreatApparatusYebat.Classes;
 
 namespace GreatApparatusYebat
 {
@@ -21,15 +24,25 @@ namespace GreatApparatusYebat
     /// </summary>
     public partial class MainWindow : Window
     {
+        Heart player = new Heart();
+
         public MainWindow()
         {
             InitializeComponent();
+
+
+            cnvsFightArea.Children.Add(player);
+            AppControls.Player = player;
+            AppControls.MainCanvas = cnvsFightArea;
+            AppControls.HealthBar = barHealth;
+            barHealth.Maximum = 30;
 
             movingTimer.Tick += MoveProjectile;
             movingTimer.Start();
 
             creatingTimer.Tick += CreateProjectile;
             creatingTimer.Start();
+
         }
 
         DispatcherTimer movingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
@@ -37,19 +50,25 @@ namespace GreatApparatusYebat
 
         private void CreateProjectile(object sender, EventArgs e)
         {
-
+            cnvsFightArea.Children.Add(new Fireball());
+            cnvsFightArea.Children.Add(new Fireball(toBottom: false));
+            cnvsFightArea.Children.Add(new Fireball(y: (int)cnvsFightArea.ActualHeight / 2));
         }
 
         private void MoveProjectile(object sender, EventArgs e)
         {
-            Canvas.SetLeft(Enemy, Canvas.GetLeft(Enemy) + 3);
+            foreach (Projectile projectile in cnvsFightArea.Children.OfType<Projectile>())
+            {
+                projectile.Move();
+            }
+            txtHealth.Text = barHealth.Value + "/30";
         }
 
         private void cnvsFightArea_MouseMove(object sender, MouseEventArgs e)
         {
             Point mousePosition = Mouse.GetPosition(cnvsFightArea);
-            Canvas.SetLeft(rectangleHero, mousePosition.X);
-            Canvas.SetTop(rectangleHero, mousePosition.Y);
+            Canvas.SetLeft(player, mousePosition.X);
+            Canvas.SetTop(player, mousePosition.Y);
         }
 
         private void brdFight_MouseDown(object sender, MouseButtonEventArgs e)

@@ -64,12 +64,17 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Classes\AppControls.cs" />
+    <Compile Include="Classes\MediaHelper.cs" />
+    <Compile Include="Classes\ProjectalesClasses\Fireball.cs" />
+    <Compile Include="Classes\ProjectalesClasses\Heart.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\ProjectalesClasses\Projectile.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
