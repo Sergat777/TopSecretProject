@@ -30,12 +30,13 @@ namespace GreatApparatusYebat
         {
             InitializeComponent();
 
+            AppControls.AppMainPanel = mainPanel;
 
             cnvsFightArea.Children.Add(player);
             AppControls.Player = player;
             AppControls.MainCanvas = cnvsFightArea;
             AppControls.HealthBar = barHealth;
-            barHealth.Maximum = 30;
+            barHealth.Maximum = 20;
 
             movingTimer.Tick += MoveProjectile;
             movingTimer.Start();
@@ -43,16 +44,34 @@ namespace GreatApparatusYebat
             creatingTimer.Tick += CreateProjectile;
             creatingTimer.Start();
 
+            MediaHelper.PlayMusic("fastTechMusic");
         }
 
         DispatcherTimer movingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
-        DispatcherTimer creatingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(777) };
+        DispatcherTimer creatingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(1000) };
+
+        Random rndm = new Random();
 
         private void CreateProjectile(object sender, EventArgs e)
         {
-            cnvsFightArea.Children.Add(new Fireball());
-            cnvsFightArea.Children.Add(new Fireball(toBottom: false));
-            cnvsFightArea.Children.Add(new Fireball(y: (int)cnvsFightArea.ActualHeight / 2));
+            for (int i = 0; i < 7; i++)
+            {
+
+                if (i % 2 != 0)
+                {
+                    Arrow projectile = new Arrow(y: rndm.Next(0, (int)cnvsFightArea.ActualHeight),
+                                                toRight: Convert.ToBoolean(rndm.Next(0, 2)),
+                                                toBottom: Convert.ToBoolean(rndm.Next(0, 2)));
+                    cnvsFightArea.Children.Add(projectile);
+                }
+                else
+                {
+                    Fireball projectile = new Fireball(y: rndm.Next(0, (int)cnvsFightArea.ActualHeight),
+                                                toRight: Convert.ToBoolean(rndm.Next(0, 2)));
+                    cnvsFightArea.Children.Add(projectile);
+                }
+
+            }
         }
 
         private void MoveProjectile(object sender, EventArgs e)

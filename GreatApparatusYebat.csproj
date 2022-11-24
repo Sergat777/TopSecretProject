@@ -66,6 +66,7 @@
     </Compile>
     <Compile Include="Classes\AppControls.cs" />
     <Compile Include="Classes\MediaHelper.cs" />
+    <Compile Include="Classes\ProjectalesClasses\Arrow.cs" />
     <Compile Include="Classes\ProjectalesClasses\Fireball.cs" />
     <Compile Include="Classes\ProjectalesClasses\Heart.cs" />
     <Compile Include="MainWindow.xaml.cs">

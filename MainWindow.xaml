@@ -14,7 +14,7 @@
     <Border x:Name="brdFight" Background="#000" BorderBrush="#fff" BorderThickness="2" Opacity="0.95" MouseDown="brdFight_MouseDown"
                 CornerRadius="20" Margin="15" Padding="25" HorizontalAlignment="Center">
         
-        <DockPanel Margin="30" LastChildFill="False">
+        <DockPanel x:Name="mainPanel" Margin="30" LastChildFill="False">
             
             <TextBlock Text="BOSS NAME + TIMER" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="25"/>
             

@@ -11,35 +11,47 @@ using System.Windows.Shapes;
 
 namespace GreatApparatusYebat.ProjectalesClasses
 {
+    public enum StraightDirections
+    {
+        LeftToRight,
+        RightToLeft,
+        TopToBottom,
+        BottomToTop,
+        Mixed
+    }
     public class Projectile : Image
     {
         public Geometry HitBox { get; set; }
         public int Speed { get; set; } = 3;
         public int Damage { get; set; } = 2;
+        public StraightDirections Direction { get; set; }
         public bool ToRight { get; set; }
         public bool ToBottom { get; set; }
         public bool IsIntersecting { get; set; }
 
         public Projectile(  int height = 30,
                             int width = 30,
-                            bool toRight = true,
-                            bool toBottom = true,
                             int x = 0,
-                            int y = 0)
+                            int y = 0,
+                            StraightDirections direction = StraightDirections.Mixed,
+                            bool toRight = true,
+                            bool toBottom = true)
         {
             Height = height;
             Width = width;
             ToRight = toRight;
             ToBottom = toBottom;
 
+            Stretch = Stretch.Fill;
+
             if (ToRight)
             {
-                Canvas.SetLeft(this, x);
+                Canvas.SetLeft(this, x - Width);
                 FlowDirection = FlowDirection.LeftToRight;
             }
             else
             {
-                Canvas.SetRight(this, x);
+                Canvas.SetRight(this, x - Width);
                 FlowDirection = FlowDirection.RightToLeft;
             }
 
@@ -85,10 +97,7 @@ namespace GreatApparatusYebat.ProjectalesClasses
 
         public virtual bool CheckIntersectWithHero()
         {
-            Geometry heroHitBox = new RectangleGeometry(new Rect(Canvas.GetLeft(AppControls.Player) + 7,
-                                                      Canvas.GetTop(AppControls.Player) + 7,
-                                                      AppControls.Player.Width - 7,
-                                                      AppControls.Player.Height - 7));
+            Geometry heroHitBox = AppControls.Player.GetHitBox();
 
             if (HitBox.FillContainsWithDetail(heroHitBox) == IntersectionDetail.Intersects &&
                 !AppControls.Player.IsProtect)
