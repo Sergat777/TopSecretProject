@@ -15,7 +15,7 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
                         int width = 30,
                         int x = 0,
                         int y = 0,
-                        StraightDirections direction = StraightDirections.Mixed) : base (height, width, x, y, direction)
+                        Directions direction = Directions.Mixed) : base (height, width, x, y, direction)
         {
             Speed = 5;
             Source = MediaHelper.GetBitmapImage("Fireball\\0");

@@ -12,7 +12,7 @@ using System.Windows.Threading;
 
 namespace GreatApparatusYebat.ProjectalesClasses
 {
-    public enum StraightDirections
+    public enum Directions
     {
         LeftToRight,
         RightToLeft,
@@ -25,18 +25,19 @@ namespace GreatApparatusYebat.ProjectalesClasses
         public Geometry HitBox { get; set; }
         public int Speed { get; set; } = 3;
         public int Damage { get; set; } = 2;
-        public StraightDirections Direction { get; set; }
+        public Directions Direction { get; set; }
         public bool ToRight { get; set; }
         public bool ToBottom { get; set; }
         public bool IsIntersecting { get; set; }
-        private byte _animationIndex = 0;
+        protected byte _animationIndex = 0;
+        protected byte _animationMax = 0;
 
-        DispatcherTimer animationTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(200) };
+        DispatcherTimer animationTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };
         public Projectile(  int height = 30,
                             int width = 30,
                             int x = 0,
                             int y = 0,
-                            StraightDirections direction = StraightDirections.Mixed,
+                            Directions direction = Directions.Mixed,
                             bool toRight = true,
                             bool toBottom = true)
         {
@@ -49,17 +50,17 @@ namespace GreatApparatusYebat.ProjectalesClasses
             animationTimer.Tick += Animate;
             animationTimer.Start();
 
-            if (Direction == StraightDirections.Mixed)
+            if (Direction == Directions.Mixed)
             {
                 if (ToRight)
                 {
                     Canvas.SetLeft(this, x - Width);
-                    FlowDirection = FlowDirection.LeftToRight;
+                    RenderTransform = new RotateTransform(90);
                 }
                 else
                 {
                     Canvas.SetRight(this, x - Width);
-                    FlowDirection = FlowDirection.RightToLeft;
+                    RenderTransform = new RotateTransform(-90);
                 }
 
                 if (ToBottom)
@@ -68,55 +69,46 @@ namespace GreatApparatusYebat.ProjectalesClasses
                     Canvas.SetBottom(this, y);
             }
 
-            if (Direction == StraightDirections.TopToBottom)
+            if (Direction == Directions.TopToBottom)
             {
                 RenderTransform = new RotateTransform(180);
-                //FlowDirection = FlowDirection.RightToLeft;
                 Canvas.SetLeft(this, x + Width);
-                Canvas.SetTop(this, 0);
+                Canvas.SetTop(this, 0 - Height);
             }
 
-            if (Direction == StraightDirections.BottomToTop)
+            if (Direction == Directions.BottomToTop)
             {
-                //RenderTransform = new RotateTransform(180);
-                //FlowDirection = FlowDirection.RightToLeft;
                 Canvas.SetLeft(this, x);
                 Canvas.SetBottom(this, 0 - Height);
             }
 
-            if (Direction == StraightDirections.LeftToRight)
+            if (Direction == Directions.LeftToRight)
             {
                 RenderTransform = new RotateTransform(90);
                 FlowDirection = FlowDirection.LeftToRight;
-                Canvas.SetLeft(this, 0);
+                Canvas.SetLeft(this, 0 - Width);
                 Canvas.SetTop(this, y);
             }
 
-            if (Direction == StraightDirections.RightToLeft)
+            if (Direction == Directions.RightToLeft)
             {
                 RenderTransform = new RotateTransform(-90);
                 Canvas.SetRight(this, 0 - Width);
-                Canvas.SetTop(this, y);
+                Canvas.SetTop(this, y + Height);
             }
         }
 
-        public void Animate(object sender, EventArgs e)
+        public virtual void Animate(object sender, EventArgs e)
         {
-            try
-            {
+            if (_animationIndex != _animationMax)
                 _animationIndex++;
-                Source = MediaHelper.GetBitmapImage("Arrow\\" + _animationIndex);
-            }
-            catch
-            {
+            else
                 _animationIndex = 0;
-                Source = MediaHelper.GetBitmapImage("Arrow\\" + _animationIndex);
-            }
         }
 
         public virtual void Move()
         {
-            if (Direction == StraightDirections.Mixed)
+            if (Direction == Directions.Mixed)
             {
                 if (ToRight)
                     Canvas.SetLeft(this, Canvas.GetLeft(this) + Speed);
@@ -129,13 +121,13 @@ namespace GreatApparatusYebat.ProjectalesClasses
                     Canvas.SetBottom(this, Canvas.GetBottom(this) + Speed);
             }
             else
-                if (Direction == StraightDirections.LeftToRight)
+                if (Direction == Directions.LeftToRight)
                 Canvas.SetLeft(this, Canvas.GetLeft(this) + Speed);
             else
-                if (Direction == StraightDirections.RightToLeft)
+                if (Direction == Directions.RightToLeft)
                 Canvas.SetRight(this, Canvas.GetRight(this) + Speed);
             else
-                if (Direction == StraightDirections.TopToBottom)
+                if (Direction == Directions.TopToBottom)
                 Canvas.SetTop(this, Canvas.GetTop(this) + Speed);
             else
                 Canvas.SetBottom(this, Canvas.GetBottom(this) + Speed);
@@ -149,43 +141,62 @@ namespace GreatApparatusYebat.ProjectalesClasses
             HitBox = new RectangleGeometry(GetHitBoxRect(0));
         }
 
+        // DO NOT TOUCH BLYAT!
         public Rect GetHitBoxRect(int smallIndex)
         {
-            double x;
-            double y;
-
-            if (ToRight)
-                x = Canvas.GetLeft(this);
-            else
-                x = AppControls.MainCanvas.ActualWidth - Canvas.GetRight(this) - Width;
-
-            if (ToBottom)
-                y = Canvas.GetTop(this);
-            else
-                y = AppControls.MainCanvas.ActualHeight - Canvas.GetBottom(this) - Height;
-
+            double x = 0;
+            double y = 0;
             Rect rect = new Rect(x, y, Width, Height);
 
-            if (Direction == StraightDirections.TopToBottom)
+            if (Direction == Directions.Mixed)
+            {
+                rect = new Rect();
+                if (ToRight)
+                {
+                    rect.X = Canvas.GetLeft(this) - Width;
+                }
+                else
+                    rect.X = AppControls.MainCanvas.ActualWidth - Canvas.GetRight(this) - Width;
+
+                if (ToBottom)
+                {
+                    if (!ToRight)
+                        rect.Y = Canvas.GetTop(this) - Height;
+                    else
+                        rect.Y = Canvas.GetTop(this);
+                }
+                else
+                {
+                    if (!ToRight)
+                        rect.Y = AppControls.MainCanvas.ActualHeight - Canvas.GetBottom(this) - Height * 2;
+                    else
+                        rect.Y = AppControls.MainCanvas.ActualHeight - Canvas.GetBottom(this) - Height;
+                }
+
+                rect.Width = Width;
+                rect.Height = Height;
+            }
+
+            if (Direction == Directions.TopToBottom)
             {
                 rect = new Rect(-Canvas.GetLeft(this), -Canvas.GetTop(this), Width, Height);
                 rect.Transform(new RotateTransform(180).Value);
             }
 
-            if (Direction == StraightDirections.BottomToTop)
+            if (Direction == Directions.BottomToTop)
             {
-                rect = new Rect(x, AppControls.MainCanvas.ActualHeight - Canvas.GetBottom(this) - Height,
+                rect = new Rect(Canvas.GetLeft(this), AppControls.MainCanvas.ActualHeight - Canvas.GetBottom(this) - Height,
                     Width, Height);
             }
 
-            if (Direction == StraightDirections.LeftToRight)
+            if (Direction == Directions.LeftToRight)
             {
-                rect = new Rect(x - Width, Canvas.GetTop(this), Width, Height);
+                rect = new Rect(Canvas.GetLeft(this) - Width, Canvas.GetTop(this), Width, Height);
             }
 
-            if (Direction == StraightDirections.RightToLeft)
+            if (Direction == Directions.RightToLeft)
             {
-                rect = new Rect(x = AppControls.MainCanvas.ActualWidth - Canvas.GetRight(this) - Width,
+                rect = new Rect(AppControls.MainCanvas.ActualWidth - Canvas.GetRight(this) - Width,
                     Canvas.GetTop(this) - Height, Width, Height);
             }
 

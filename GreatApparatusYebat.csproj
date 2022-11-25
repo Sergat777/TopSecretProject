@@ -69,6 +69,7 @@
     <Compile Include="Classes\ProjectalesClasses\Arrow.cs" />
     <Compile Include="Classes\ProjectalesClasses\Fireball.cs" />
     <Compile Include="Classes\ProjectalesClasses\Heart.cs" />
+    <Compile Include="Classes\ProjectalesClasses\ProjectileGenerator.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

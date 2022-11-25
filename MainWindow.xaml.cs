@@ -38,24 +38,15 @@ namespace GreatApparatusYebat
             AppControls.MainCanvas = cnvsFightArea;
             AppControls.HealthBar = barHealth;
             barHealth.Maximum = 20;
-
-            movingTimer.Tick += MoveProjectile;
-            movingTimer.Start();
-
-            creatingTimer.Tick += CreateProjectile;
-            creatingTimer.Start();
-
+            new ProjectileGenerator(ProjectileClass.Arrow, 3, TimeSpan.FromMilliseconds(1000), Directions.RightToLeft, true, cnvsFightArea);
+            new ProjectileGenerator(ProjectileClass.Arrow, 3, TimeSpan.FromMilliseconds(1000), Directions.TopToBottom, true, cnvsFightArea);
             gameTime.Tick += AddSecond;
             gameTime.Start();
 
-            MediaHelper.PlayMusic("fastTechMusic");
+            //MediaHelper.PlayMusic("fastTechMusic");
         }
 
         DispatcherTimer gameTime = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1)};
-        DispatcherTimer movingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
-        DispatcherTimer creatingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(1000) };
-
-        Random rndm = new Random();
 
         private void AddSecond(object sender, EventArgs e)
         {
@@ -74,50 +65,8 @@ namespace GreatApparatusYebat
                 txtTime.Text += "0" + seconds;
             else
                 txtTime.Text += seconds;
-        }
 
-        private void CreateProjectile(object sender, EventArgs e)
-        {
-            if ((DateTime.Now.TimeOfDay - startTime).Seconds < 7)
-            {
-                Arrow arrow0 = new Arrow(direction: StraightDirections.LeftToRight,
-                                        y: (int)cnvsFightArea.ActualHeight - 30);
-                                                  
-                //Arrow arrow1 = new Arrow(y: rndm.Next(0, (int)cnvsFightArea.ActualHeight), direction: StraightDirections.RightToLeft);
-                //Arrow arrow2 = new Arrow(x: rndm.Next(0, (int)cnvsFightArea.ActualWidth), direction: StraightDirections.TopToBottom);
-                //Arrow arrow3 = new Arrow(x: rndm.Next(0, (int)cnvsFightArea.ActualWidth), direction: StraightDirections.BottomToTop);
-                cnvsFightArea.Children.Add(arrow0);
-                //cnvsFightArea.Children.Add(arrow1);
-                //cnvsFightArea.Children.Add(arrow2);
-                //cnvsFightArea.Children.Add(arrow3);
-            }
-            else
-                if ((DateTime.Now.TimeOfDay - startTime).Seconds > 10)
-            {
-                MessageBox.Show(cnvsFightArea.Children.Count.ToString());
-                cnvsFightArea.Children.RemoveRange(1, cnvsFightArea.Children.Count - 1);
-                MessageBox.Show(cnvsFightArea.Children.Count.ToString());
-            }
-            //Arrow arrowRight = new Arrow(direction: StraightDirections.RightToLeft,
-            //                            y: (int)cnvsFightArea.ActualHeight - 3);
-            //Arrow arrowLeft = new Arrow(direction: StraightDirections.LeftToRight);
-            //Arrow arrowBottom = new Arrow(direction: StraightDirections.TopToBottom);
-            //Arrow arrowTop = new Arrow(direction: StraightDirections.BottomToTop,
-            //                            x: (int)cnvsFightArea.ActualWidth - 30);
-
-            //cnvsFightArea.Children.Add(arrowBottom);
-            //cnvsFightArea.Children.Add(arrowTop);
-            //cnvsFightArea.Children.Add(arrowLeft);
-            //cnvsFightArea.Children.Add(arrowRight);
-        }
-
-        private void MoveProjectile(object sender, EventArgs e)
-        {
-            
-            foreach (Projectile projectile in cnvsFightArea.Children.OfType<Projectile>())
-            {
-                projectile.Move();
-            }
+            txtTime.Text += "\n" + cnvsFightArea.Children.Count;
 
             if (barHealth.Value == 0)
             {

@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace GreatApparatusYebat.Classes.ProjectalesClasses
 {
@@ -15,23 +16,19 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
                      int width = 20,
                      int x = 0,
                      int y = 0,
-                     StraightDirections direction = StraightDirections.TopToBottom,
+                     Directions direction = Directions.Mixed,
                      bool toRight = true,
                      bool toBottom = true) : base(height, width, x, y, direction, toRight, toBottom)
         {
             Source = MediaHelper.GetBitmapImage("Arrow\\0");
+            _animationMax = 3;
+        }
 
-            //if (direction != StraightDirections.Mixed)
-            //{
-            //    //if (direction == StraightDirections.RightToLeft)
-            //    //    FlowDirection = System.Windows.FlowDirection.RightToLeft;
-            //    //if (direction == StraightDirections.TopToBottom)
-            //    //    RenderTransform = new RotateTransform(90);
-            //    //if (direction == StraightDirections.BottomToTop)
-            //    //    RenderTransform = new RotateTransform(-90);
-            //}
+        public override void Animate(object sender, EventArgs e)
+        {
+            base.Animate(sender, e);
 
-            
+            Source = MediaHelper.GetBitmapImage("Arrow\\" + _animationIndex);
         }
 
         public override void UpdateProjectileRect()
