@@ -93,6 +93,16 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
                     GenerateProjectiles.Add(arrow);
                     GenerateArea.Children.Add(arrow);
                 }
+
+                if (GenerateClass == ProjectileClass.Fireball)
+                {
+                    Fireball fireball = new Fireball(x: _projectilesX,
+                                            y: _projectilesY,
+                                            direction: Direction);
+
+                    GenerateProjectiles.Add(fireball);
+                    GenerateArea.Children.Add(fireball);
+                }
             }
 
             //MessageBox.Show(AppControls.MainCanvas.Children.Count.ToString());

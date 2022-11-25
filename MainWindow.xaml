@@ -24,7 +24,8 @@
                 <TextBlock x:Name="txtHealth" Margin="10"/>
             </StackPanel>
 
-            <Border BorderBrush="#fff" BorderThickness="5" HorizontalAlignment="Center" Height="400" Width="400">
+            <Border BorderBrush="#fff" BorderThickness="5" HorizontalAlignment="Center"
+                    Height="400" Width="400">
                 <Canvas Background="#000" MouseMove="cnvsFightArea_MouseMove"
                         x:Name="cnvsFightArea" ClipToBounds="True" Cursor="None"/>
             </Border>

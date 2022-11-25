@@ -38,7 +38,7 @@ namespace GreatApparatusYebat.Classes
             AppControls.AppMainPanel.Children.Add(media);
         }
 
-        public static void RepeatMedia(object sender, EventArgs e)
+        private static void RepeatMedia(object sender, EventArgs e)
         {
             (sender as MediaElement).Position = TimeSpan.Zero;
         }

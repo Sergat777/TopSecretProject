@@ -38,15 +38,14 @@ namespace GreatApparatusYebat
             AppControls.MainCanvas = cnvsFightArea;
             AppControls.HealthBar = barHealth;
             barHealth.Maximum = 20;
-            new ProjectileGenerator(ProjectileClass.Arrow, 3, TimeSpan.FromMilliseconds(1000), Directions.RightToLeft, true, cnvsFightArea);
-            new ProjectileGenerator(ProjectileClass.Arrow, 3, TimeSpan.FromMilliseconds(1000), Directions.TopToBottom, true, cnvsFightArea);
-            gameTime.Tick += AddSecond;
-            gameTime.Start();
+            new ProjectileGenerator(ProjectileClass.Fireball, 3, TimeSpan.FromMilliseconds(1000), Directions.LeftToRight, false, cnvsFightArea);
+            gameTimer.Tick += AddSecond;
+            gameTimer.Start();
 
             //MediaHelper.PlayMusic("fastTechMusic");
         }
 
-        DispatcherTimer gameTime = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1)};
+        DispatcherTimer gameTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1)};
 
         private void AddSecond(object sender, EventArgs e)
         {
