@@ -11,11 +11,11 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
 {
     public class Arrow : Projectile
     {
-        public Arrow(int height = 30,
-                     int width = 30,
+        public Arrow(int height = 20,
+                     int width = 20,
                      int x = 0,
                      int y = 0,
-                     StraightDirections direction = StraightDirections.Mixed,
+                     StraightDirections direction = StraightDirections.TopToBottom,
                      bool toRight = true,
                      bool toBottom = true) : base(height, width, x, y, direction, toRight, toBottom)
         {
@@ -32,6 +32,11 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
             //}
 
             
+        }
+
+        public override void UpdateProjectileRect()
+        {
+            HitBox = new RectangleGeometry(GetHitBoxRect(3));
         }
     }
 }

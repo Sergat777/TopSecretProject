@@ -16,12 +16,12 @@
         
         <DockPanel x:Name="mainPanel" Margin="30" LastChildFill="False">
             
-            <TextBlock Text="BOSS NAME + TIMER" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="25"/>
+            <TextBlock x:Name="txtTime" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="25"/>
             
             <StackPanel Orientation="Horizontal" DockPanel.Dock="Bottom" HorizontalAlignment="Center">
                 <TextBlock Text="HP" Margin="10"/>
                 <ProgressBar x:Name="barHealth" Value="100" Foreground="#F00" Width="170" Height="30" Margin="10"/>
-                <TextBlock x:Name="txtHealth" Text="30/30" Margin="10"/>
+                <TextBlock x:Name="txtHealth" Margin="10"/>
             </StackPanel>
 
             <Border BorderBrush="#fff" BorderThickness="5" HorizontalAlignment="Center" Height="400" Width="400">

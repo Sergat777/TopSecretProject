@@ -15,24 +15,12 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
                         int width = 30,
                         int x = 0,
                         int y = 0,
-                        StraightDirections direction = StraightDirections.Mixed,
-                        bool toRight = true,
-                        bool toBottom = true) : base (height, width, x, y, direction, toRight, toBottom)
+                        StraightDirections direction = StraightDirections.Mixed) : base (height, width, x, y, direction)
         {
+            Speed = 5;
             Source = MediaHelper.GetBitmapImage("Fireball\\0");
-            Width = width;
-            Height = width / 2;
-        }
-
-        public override void Move()
-        {
-            if (ToRight)
-                Canvas.SetLeft(this, Canvas.GetLeft(this) + Speed);
-            else
-                Canvas.SetRight(this, Canvas.GetRight(this) + Speed);
-
-            UpdateProjectileRect();
-            CheckIntersectWithHero();
+            Height = Height;
+            Width = Height / 2;
         }
     }
 }

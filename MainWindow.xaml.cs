@@ -25,13 +25,14 @@ namespace GreatApparatusYebat
     public partial class MainWindow : Window
     {
         Heart player = new Heart();
+        TimeSpan startTime;
 
         public MainWindow()
         {
             InitializeComponent();
 
             AppControls.AppMainPanel = mainPanel;
-
+            startTime = DateTime.Now.TimeOfDay;
             cnvsFightArea.Children.Add(player);
             AppControls.Player = player;
             AppControls.MainCanvas = cnvsFightArea;
@@ -44,43 +45,86 @@ namespace GreatApparatusYebat
             creatingTimer.Tick += CreateProjectile;
             creatingTimer.Start();
 
+            gameTime.Tick += AddSecond;
+            gameTime.Start();
+
             MediaHelper.PlayMusic("fastTechMusic");
         }
 
+        DispatcherTimer gameTime = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1)};
         DispatcherTimer movingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30) };
         DispatcherTimer creatingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(1000) };
 
         Random rndm = new Random();
 
+        private void AddSecond(object sender, EventArgs e)
+        {
+            byte minutes = (byte)(DateTime.Now.TimeOfDay - startTime).Minutes;
+            byte seconds = (byte)(DateTime.Now.TimeOfDay - startTime).Seconds;
+            txtTime.Text = "";
+
+            if (minutes < 10)
+                txtTime.Text += "0" + minutes;
+            else
+                txtTime.Text += minutes;
+
+            txtTime.Text += ":";
+
+            if (seconds < 10)
+                txtTime.Text += "0" + seconds;
+            else
+                txtTime.Text += seconds;
+        }
+
         private void CreateProjectile(object sender, EventArgs e)
         {
-            for (int i = 0; i < 7; i++)
+            if ((DateTime.Now.TimeOfDay - startTime).Seconds < 7)
             {
-
-                if (i % 2 != 0)
-                {
-                    Arrow projectile = new Arrow(y: rndm.Next(0, (int)cnvsFightArea.ActualHeight),
-                                                toRight: Convert.ToBoolean(rndm.Next(0, 2)),
-                                                toBottom: Convert.ToBoolean(rndm.Next(0, 2)));
-                    cnvsFightArea.Children.Add(projectile);
-                }
-                else
-                {
-                    Fireball projectile = new Fireball(y: rndm.Next(0, (int)cnvsFightArea.ActualHeight),
-                                                toRight: Convert.ToBoolean(rndm.Next(0, 2)));
-                    cnvsFightArea.Children.Add(projectile);
-                }
-
+                Arrow arrow0 = new Arrow(direction: StraightDirections.LeftToRight,
+                                        y: (int)cnvsFightArea.ActualHeight - 30);
+                                                  
+                //Arrow arrow1 = new Arrow(y: rndm.Next(0, (int)cnvsFightArea.ActualHeight), direction: StraightDirections.RightToLeft);
+                //Arrow arrow2 = new Arrow(x: rndm.Next(0, (int)cnvsFightArea.ActualWidth), direction: StraightDirections.TopToBottom);
+                //Arrow arrow3 = new Arrow(x: rndm.Next(0, (int)cnvsFightArea.ActualWidth), direction: StraightDirections.BottomToTop);
+                cnvsFightArea.Children.Add(arrow0);
+                //cnvsFightArea.Children.Add(arrow1);
+                //cnvsFightArea.Children.Add(arrow2);
+                //cnvsFightArea.Children.Add(arrow3);
             }
+            else
+                if ((DateTime.Now.TimeOfDay - startTime).Seconds > 10)
+            {
+                MessageBox.Show(cnvsFightArea.Children.Count.ToString());
+                cnvsFightArea.Children.RemoveRange(1, cnvsFightArea.Children.Count - 1);
+                MessageBox.Show(cnvsFightArea.Children.Count.ToString());
+            }
+            //Arrow arrowRight = new Arrow(direction: StraightDirections.RightToLeft,
+            //                            y: (int)cnvsFightArea.ActualHeight - 3);
+            //Arrow arrowLeft = new Arrow(direction: StraightDirections.LeftToRight);
+            //Arrow arrowBottom = new Arrow(direction: StraightDirections.TopToBottom);
+            //Arrow arrowTop = new Arrow(direction: StraightDirections.BottomToTop,
+            //                            x: (int)cnvsFightArea.ActualWidth - 30);
+
+            //cnvsFightArea.Children.Add(arrowBottom);
+            //cnvsFightArea.Children.Add(arrowTop);
+            //cnvsFightArea.Children.Add(arrowLeft);
+            //cnvsFightArea.Children.Add(arrowRight);
         }
 
         private void MoveProjectile(object sender, EventArgs e)
         {
+            
             foreach (Projectile projectile in cnvsFightArea.Children.OfType<Projectile>())
             {
                 projectile.Move();
             }
-            txtHealth.Text = barHealth.Value + "/30";
+
+            if (barHealth.Value == 0)
+            {
+                MessageBox.Show("Заебався? " + cnvsFightArea.Children.Count);
+                Close();
+            }
+            txtHealth.Text = barHealth.Value + "/20";
         }
 
         private void cnvsFightArea_MouseMove(object sender, MouseEventArgs e)
