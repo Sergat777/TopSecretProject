@@ -38,7 +38,8 @@ namespace GreatApparatusYebat
             AppControls.MainCanvas = cnvsFightArea;
             AppControls.HealthBar = barHealth;
             barHealth.Maximum = 20;
-            new ProjectileGenerator(ProjectileClass.Fireball, 3, TimeSpan.FromMilliseconds(1000), Directions.LeftToRight, false, cnvsFightArea);
+            new ProjectileGenerator(ProjectileClass.Fireball, 6, TimeSpan.FromMilliseconds(1500),
+                                    Directions.LeftToRight, true, cnvsFightArea);
             gameTimer.Tick += AddSecond;
             gameTimer.Start();
 
@@ -69,7 +70,7 @@ namespace GreatApparatusYebat
 
             if (barHealth.Value == 0)
             {
-                MessageBox.Show("Заебався? " + cnvsFightArea.Children.Count);
+                MessageBox.Show("Заебався? ");
                 Close();
             }
             txtHealth.Text = barHealth.Value + "/20";

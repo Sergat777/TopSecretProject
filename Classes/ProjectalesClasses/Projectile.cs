@@ -85,16 +85,15 @@ namespace GreatApparatusYebat.ProjectalesClasses
             if (Direction == Directions.LeftToRight)
             {
                 RenderTransform = new RotateTransform(90);
-                FlowDirection = FlowDirection.LeftToRight;
-                Canvas.SetLeft(this, 0 - Width);
-                Canvas.SetTop(this, y);
+                Canvas.SetLeft(this, 0 - Height);
+                Canvas.SetTop(this, y + Width);
             }
 
             if (Direction == Directions.RightToLeft)
             {
                 RenderTransform = new RotateTransform(-90);
-                Canvas.SetRight(this, 0 - Width);
-                Canvas.SetTop(this, y + Height);
+                Canvas.SetRight(this, 0 - Height);
+                Canvas.SetTop(this, y + Width);
             }
         }
 
@@ -191,13 +190,13 @@ namespace GreatApparatusYebat.ProjectalesClasses
 
             if (Direction == Directions.LeftToRight)
             {
-                rect = new Rect(Canvas.GetLeft(this) - Width, Canvas.GetTop(this), Width, Height);
+                rect = new Rect(Canvas.GetLeft(this) - Height, Canvas.GetTop(this), Height, Width);
             }
 
             if (Direction == Directions.RightToLeft)
             {
                 rect = new Rect(AppControls.MainCanvas.ActualWidth - Canvas.GetRight(this) - Width,
-                    Canvas.GetTop(this) - Height, Width, Height);
+                    Canvas.GetTop(this) - Width, Height, Width);
             }
 
             return new Rect(rect.X + smallIndex, rect.Y + smallIndex, rect.Width - smallIndex, rect.Height - smallIndex);
