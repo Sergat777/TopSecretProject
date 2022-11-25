@@ -49,21 +49,24 @@ namespace GreatApparatusYebat.ProjectalesClasses
             animationTimer.Tick += Animate;
             animationTimer.Start();
 
-            if (ToRight)
+            if (Direction == StraightDirections.Mixed)
             {
-                Canvas.SetLeft(this, x - Width);
-                FlowDirection = FlowDirection.LeftToRight;
-            }
-            else
-            {
-                Canvas.SetRight(this, x - Width);
-                FlowDirection = FlowDirection.RightToLeft;
-            }
+                if (ToRight)
+                {
+                    Canvas.SetLeft(this, x - Width);
+                    FlowDirection = FlowDirection.LeftToRight;
+                }
+                else
+                {
+                    Canvas.SetRight(this, x - Width);
+                    FlowDirection = FlowDirection.RightToLeft;
+                }
 
-            if (ToBottom)
-                Canvas.SetTop(this, y);
-            else
-                Canvas.SetBottom(this, y);
+                if (ToBottom)
+                    Canvas.SetTop(this, y);
+                else
+                    Canvas.SetBottom(this, y);
+            }
 
             if (Direction == StraightDirections.TopToBottom)
             {
