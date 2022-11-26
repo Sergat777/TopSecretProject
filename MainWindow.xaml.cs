@@ -16,6 +16,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using GreatApparatusYebat.Classes.ProjectalesClasses;
 using GreatApparatusYebat.Classes;
+using System.Runtime.InteropServices;
 
 namespace GreatApparatusYebat
 {
@@ -29,9 +30,24 @@ namespace GreatApparatusYebat
         TimeSpan startTime;
         DispatcherTimer gameTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
 
+        public const UInt32 SPI_SETMOUSESPEED = 0x0071;
+
+        [DllImport("User32.dll")]
+        static extern Boolean SystemParametersInfo(
+            UInt32 uiAction,
+            UInt32 uiParam,
+            UInt32 pvParam,
+            UInt32 fWinIni);
+
         public MainWindow()
         {
             InitializeComponent();
+
+            SystemParametersInfo(
+                SPI_SETMOUSESPEED,
+                0,
+                0,
+                0);
 
             AppControls.AppMainPanel = mainPanel;
             startTime = DateTime.Now.TimeOfDay;

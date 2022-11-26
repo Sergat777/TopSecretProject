@@ -114,15 +114,12 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
 
         public void MoveProjectiles(object sender, EventArgs e)
         {
+            List<Projectile> RemovingList = new List<Projectile>();
+
             foreach (Projectile projectile in GenerateProjectiles)
             {
                 projectile.Move();
-            }
-
-            List<Projectile> RemovingList = new List<Projectile>();
-
-            foreach (Projectile projectile in AppControls.MainCanvas.Children.OfType<Projectile>())
-            {
+                
                 bool isOverX = Canvas.GetLeft(projectile) > AppControls.MainCanvas.ActualWidth
                                 || Canvas.GetRight(projectile) > AppControls.MainCanvas.ActualWidth;
 
