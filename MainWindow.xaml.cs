@@ -40,7 +40,7 @@ namespace GreatApparatusYebat
             AppControls.MainCanvas = cnvsFightArea;
             AppControls.HealthBar = barHealth;
             barHealth.Maximum = 20;
-            generators.Add(new ProjectileGenerator(ProjectileClass.Arrow,
+            generators.Add(new ProjectileGenerator(ProjectileClass.Fireball,
                                                    2, TimeSpan.FromMilliseconds(1000),
                                                    Directions.TopToBottom, true, cnvsFightArea));
             gameTimer.Tick += AddSecond;
