@@ -21,17 +21,18 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
         public List<Projectile> GenerateProjectiles { get; set; } = new List<Projectile>();
         public ProjectileClass GenerateClass;
         public int ProjectilesPerInterval;
-        Directions Direction;
-        bool IsRandom;
-        Canvas GenerateArea;
+        public Directions Direction;
+        public bool IsRandom;
+        public Canvas GenerateArea;
+        public bool IsON = false;
 
         private int _projectilesX;
         private int _projectilesY;
         private bool _projectilesToRight;
         private bool _projectilesToBottom;
 
-        DispatcherTimer movingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30)};
-        DispatcherTimer generateTimer = new DispatcherTimer();
+        private DispatcherTimer _movingTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(30)};
+        private DispatcherTimer _generateTimer = new DispatcherTimer();
 
         public ProjectileGenerator( ProjectileClass generateClass,
                                     int projectilesPerInterval,
@@ -55,65 +56,66 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
             _projectilesToRight = toRight;
             _projectilesToBottom = toBottom;
 
-            movingTimer.Tick += MoveProjectiles;
-            movingTimer.Start();
+            _movingTimer.Tick += MoveProjectiles;
+            _movingTimer.Start();
 
-            generateTimer.Interval = interval;
-            generateTimer.Tick += GenerateProjectile;
-            generateTimer.Start();
+            _generateTimer.Interval = interval;
+            _generateTimer.Tick += GenerateProjectile;
+            _generateTimer.Start();
+
+            IsON = true;
         }
 
         public void GenerateProjectile(object sender, EventArgs e)
         {
-            Random rndm = new Random();
-            for (int i = 0; i < ProjectilesPerInterval; i++)
+            if (IsON)
             {
-                if (IsRandom)
+                Random rndm = new Random();
+                for (int i = 0; i < ProjectilesPerInterval; i++)
                 {
-                    if (Direction == Directions.Mixed)
+                    if (IsRandom)
                     {
-                        _projectilesToRight = Convert.ToBoolean(rndm.Next(0, 2));
-                        _projectilesToBottom = Convert.ToBoolean(rndm.Next(0, 2));
+                        if (Direction == Directions.Mixed)
+                        {
+                            _projectilesToRight = Convert.ToBoolean(rndm.Next(0, 2));
+                            _projectilesToBottom = Convert.ToBoolean(rndm.Next(0, 2));
+                        }
+                        else
+                        {
+                            _projectilesX = rndm.Next(0, (int)AppControls.MainCanvas.ActualWidth);
+                            _projectilesY = rndm.Next(0, (int)AppControls.MainCanvas.ActualHeight);
+                        }
                     }
-                    else
+
+                    if (GenerateClass == ProjectileClass.Arrow)
                     {
-                        _projectilesX = rndm.Next(0, (int)AppControls.MainCanvas.ActualWidth);
-                        _projectilesY = rndm.Next(0, (int)AppControls.MainCanvas.ActualHeight);
+                        Arrow arrow = new Arrow(x: _projectilesX,
+                                                y: _projectilesY,
+                                                direction: Direction,
+                                                toRight: _projectilesToRight,
+                                                toBottom: _projectilesToBottom);
+
+                        GenerateProjectiles.Add(arrow);
+                        GenerateArea.Children.Add(arrow);
                     }
-                }
 
-                if (GenerateClass == ProjectileClass.Arrow)
-                {
-                    Arrow arrow = new Arrow(x: _projectilesX,
-                                            y: _projectilesY,
-                                            direction: Direction,
-                                            toRight: _projectilesToRight,
-                                            toBottom: _projectilesToBottom);
+                    if (GenerateClass == ProjectileClass.Fireball)
+                    {
+                        Fireball fireball = new Fireball(x: _projectilesX,
+                                                y: _projectilesY,
+                                                direction: Direction);
 
-                    GenerateProjectiles.Add(arrow);
-                    GenerateArea.Children.Add(arrow);
-                }
-
-                if (GenerateClass == ProjectileClass.Fireball)
-                {
-                    Fireball fireball = new Fireball(x: _projectilesX,
-                                            y: _projectilesY,
-                                            direction: Direction);
-
-                    GenerateProjectiles.Add(fireball);
-                    GenerateArea.Children.Add(fireball);
+                        GenerateProjectiles.Add(fireball);
+                        GenerateArea.Children.Add(fireball);
+                    }
                 }
             }
-
-            //MessageBox.Show(AppControls.MainCanvas.Children.Count.ToString());
         }
 
         public void MoveProjectiles(object sender, EventArgs e)
         {
-            AppControls.MainCanvas.Children.RemoveRange(1, AppControls.MainCanvas.Children.Count - 1);
             foreach (Projectile projectile in GenerateProjectiles)
             {
-                AppControls.MainCanvas.Children.Add(projectile);
                 projectile.Move();
             }
 
@@ -140,8 +142,13 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
                 }
             }
 
-            foreach (Projectile a in RemovingList)
-                GenerateProjectiles.Remove(a);
+            foreach (Projectile removingProjectile in RemovingList)
+                AppControls.MainCanvas.Children.Remove(removingProjectile);
+        }
+
+        public void SwitchPower()
+        {
+            IsON = !IsON;
         }
     }
 }

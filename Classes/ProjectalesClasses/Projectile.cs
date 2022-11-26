@@ -28,7 +28,6 @@ namespace GreatApparatusYebat.ProjectalesClasses
         public Directions Direction { get; set; }
         public bool ToRight { get; set; }
         public bool ToBottom { get; set; }
-        public bool IsIntersecting { get; set; }
         protected byte _animationIndex = 0;
         protected byte _animationMax = 0;
 
@@ -47,7 +46,7 @@ namespace GreatApparatusYebat.ProjectalesClasses
             ToBottom = toBottom;
             Direction = direction;
             Stretch = Stretch.Fill;
-            animationTimer.Tick += Animate;
+            animationTimer.Tick += SetNextSprite;
             animationTimer.Start();
 
             if (Direction == Directions.Mixed)
@@ -97,7 +96,7 @@ namespace GreatApparatusYebat.ProjectalesClasses
             }
         }
 
-        public virtual void Animate(object sender, EventArgs e)
+        public virtual void SetNextSprite(object sender, EventArgs e)
         {
             if (_animationIndex != _animationMax)
                 _animationIndex++;
@@ -108,17 +107,7 @@ namespace GreatApparatusYebat.ProjectalesClasses
         public virtual void Move()
         {
             if (Direction == Directions.Mixed)
-            {
-                if (ToRight)
-                    Canvas.SetLeft(this, Canvas.GetLeft(this) + Speed);
-                else
-                    Canvas.SetRight(this, Canvas.GetRight(this) + Speed);
-
-                if (ToBottom)
-                    Canvas.SetTop(this, Canvas.GetTop(this) + Speed);
-                else
-                    Canvas.SetBottom(this, Canvas.GetBottom(this) + Speed);
-            }
+                MixedMove();
             else
                 if (Direction == Directions.LeftToRight)
                 Canvas.SetLeft(this, Canvas.GetLeft(this) + Speed);
@@ -133,6 +122,19 @@ namespace GreatApparatusYebat.ProjectalesClasses
 
             UpdateProjectileRect();
             CheckIntersectWithHero();
+        }
+
+        public virtual void MixedMove()
+        {
+            if (ToRight)
+                Canvas.SetLeft(this, Canvas.GetLeft(this) + Speed);
+            else
+                Canvas.SetRight(this, Canvas.GetRight(this) + Speed);
+
+            if (ToBottom)
+                Canvas.SetTop(this, Canvas.GetTop(this) + Speed);
+            else
+                Canvas.SetBottom(this, Canvas.GetBottom(this) + Speed);
         }
 
         public virtual void UpdateProjectileRect()
@@ -211,11 +213,9 @@ namespace GreatApparatusYebat.ProjectalesClasses
                 !AppControls.Player.IsProtect)
             {
                 AppControls.Player.ApplyDamage(Damage);
-                IsIntersecting = true;
+                Canvas.SetTop(this, 1000);
+                Canvas.SetLeft(this, 1000);
             }
-            else
-                if (HitBox.FillContainsWithDetail(heroHitBox) == IntersectionDetail.Empty)
-                IsIntersecting = false;
 
             return HitBox.FillContainsWithDetail(heroHitBox) == IntersectionDetail.Intersects;
         }

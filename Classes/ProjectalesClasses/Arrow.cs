@@ -24,9 +24,9 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
             _animationMax = 3;
         }
 
-        public override void Animate(object sender, EventArgs e)
+        public override void SetNextSprite(object sender, EventArgs e)
         {
-            base.Animate(sender, e);
+            base.SetNextSprite(sender, e);
 
             Source = MediaHelper.GetBitmapImage("Arrow\\" + _animationIndex);
         }

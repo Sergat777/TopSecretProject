@@ -25,7 +25,9 @@ namespace GreatApparatusYebat
     public partial class MainWindow : Window
     {
         Heart player = new Heart();
+        List<ProjectileGenerator> generators = new List<ProjectileGenerator>();
         TimeSpan startTime;
+        DispatcherTimer gameTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
 
         public MainWindow()
         {
@@ -38,15 +40,14 @@ namespace GreatApparatusYebat
             AppControls.MainCanvas = cnvsFightArea;
             AppControls.HealthBar = barHealth;
             barHealth.Maximum = 20;
-            new ProjectileGenerator(ProjectileClass.Fireball, 6, TimeSpan.FromMilliseconds(1500),
-                                    Directions.LeftToRight, true, cnvsFightArea);
+            generators.Add(new ProjectileGenerator(ProjectileClass.Arrow,
+                                                   2, TimeSpan.FromMilliseconds(1000),
+                                                   Directions.TopToBottom, true, cnvsFightArea));
             gameTimer.Tick += AddSecond;
             gameTimer.Start();
 
-            //MediaHelper.PlayMusic("fastTechMusic");
+            MediaHelper.PlayMusic("romanticTechMusic");
         }
-
-        DispatcherTimer gameTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1)};
 
         private void AddSecond(object sender, EventArgs e)
         {
@@ -68,12 +69,35 @@ namespace GreatApparatusYebat
 
             txtTime.Text += "\n" + cnvsFightArea.Children.Count;
 
+            if (seconds == 7)
+                generators.Add(new ProjectileGenerator(ProjectileClass.Arrow,
+                                                       2, TimeSpan.FromMilliseconds(1000),
+                                                       Directions.LeftToRight, true, cnvsFightArea));
+            if (seconds == 15)
+                generators.Add(new ProjectileGenerator(ProjectileClass.Arrow,
+                                                       2, TimeSpan.FromMilliseconds(1000),
+                                                       Directions.RightToLeft, true, cnvsFightArea));
+            if (seconds == 30)
+                generators.Add(new ProjectileGenerator(ProjectileClass.Arrow,
+                                                       2, TimeSpan.FromMilliseconds(1500),
+                                                       Directions.Mixed, true, cnvsFightArea));
+            if (seconds == 45)
+                generators.Add(new ProjectileGenerator(ProjectileClass.Arrow,
+                                                       2, TimeSpan.FromMilliseconds(1500),
+                                                       Directions.BottomToTop, true, cnvsFightArea));
+            if (seconds == 0)
+            {
+                foreach (ProjectileGenerator generator in generators)
+                    generator.SwitchPower();
+                generators.Clear();
+            }
+
+            txtHealth.Text = barHealth.Value + "/20";
             if (barHealth.Value == 0)
             {
-                MessageBox.Show("Заебався? ");
+                MessageBox.Show("Ты проебался. . .");
                 Close();
             }
-            txtHealth.Text = barHealth.Value + "/20";
         }
 
         private void cnvsFightArea_MouseMove(object sender, MouseEventArgs e)
