@@ -31,7 +31,7 @@ namespace GreatApparatusYebat.ProjectalesClasses
         protected byte _animationIndex = 0;
         protected byte _animationMax = 0;
 
-        DispatcherTimer animationTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };
+        protected DispatcherTimer _animationTimer = new DispatcherTimer() { Interval = TimeSpan.FromMilliseconds(500) };
         public Projectile(  int height = 30,
                             int width = 30,
                             int x = 0,
@@ -46,9 +46,14 @@ namespace GreatApparatusYebat.ProjectalesClasses
             ToBottom = toBottom;
             Direction = direction;
             Stretch = Stretch.Fill;
-            animationTimer.Tick += SetNextSprite;
-            animationTimer.Start();
+            _animationTimer.Tick += SetNextSprite;
+            _animationTimer.Start();
 
+            SetStartPositions(x, y);
+        }
+
+        public void SetStartPositions(int x, int y)
+        {
             if (Direction == Directions.Mixed)
             {
                 if (ToRight)
@@ -85,14 +90,14 @@ namespace GreatApparatusYebat.ProjectalesClasses
             {
                 RenderTransform = new RotateTransform(90);
                 Canvas.SetLeft(this, 0 - Height);
-                Canvas.SetTop(this, y + Width);
+                Canvas.SetTop(this, y);
             }
 
             if (Direction == Directions.RightToLeft)
             {
                 RenderTransform = new RotateTransform(-90);
                 Canvas.SetRight(this, 0 - Height);
-                Canvas.SetTop(this, y + Width);
+                Canvas.SetTop(this, y - Width);
             }
         }
 

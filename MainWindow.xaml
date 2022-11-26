@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GreatApparatusYebat"
         mc:Ignorable="d"
-        Title="MainWindow" WindowState="Maximized" WindowStyle="None">
+        Title="MainWindow" WindowState="Maximized" WindowStyle="None" KeyUp="Window_KeyUp" KeyDown="Window_KeyDown">
     <Window.Background>
         <ImageBrush ImageSource="/Resources/image.psd.png"/>
     </Window.Background>
@@ -13,7 +13,7 @@
 
     <Border x:Name="brdFight" Background="#000" BorderBrush="#fff" BorderThickness="2" Opacity="0.95" MouseDown="brdFight_MouseDown"
                 CornerRadius="20" Margin="15" Padding="25" HorizontalAlignment="Center">
-        
+
         <DockPanel x:Name="mainPanel" LastChildFill="False" HorizontalAlignment="Center">
             
             <TextBlock x:Name="txtTime" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="25"/>

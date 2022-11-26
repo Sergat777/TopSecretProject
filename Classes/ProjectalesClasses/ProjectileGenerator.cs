@@ -141,6 +141,7 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
 
             foreach (Projectile removingProjectile in RemovingList)
                 AppControls.MainCanvas.Children.Remove(removingProjectile);
+
         }
 
         public void SwitchPower()

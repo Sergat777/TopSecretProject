@@ -11,8 +11,8 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
 {
     public class Heart : Image
     {
+        public int Speed = 5;
         public byte Health { get; set; } = 20;
-        Geometry HitBox { get; set; }
         public bool IsProtect { get; set; } = false;
 
         private byte _protectionIndex = 0;
@@ -56,6 +56,38 @@ namespace GreatApparatusYebat.Classes.ProjectalesClasses
                 _protectionIndex = 0;
                 protectionTimer.Stop();
             }
+        }
+
+        public void MoveToLeft()
+        {
+            if (Canvas.GetLeft(this) - Speed > 0)
+                Canvas.SetLeft(this, Canvas.GetLeft(this) - Speed);
+            else
+                Canvas.SetLeft(this, 0);
+        }
+
+        public void MoveToRight()
+        {
+            if (Canvas.GetLeft(this) + Speed < AppControls.MainCanvas.ActualWidth - Width)
+                Canvas.SetLeft(this, Canvas.GetLeft(this) + Speed);
+            else
+                Canvas.SetLeft(this, AppControls.MainCanvas.ActualWidth - Width);
+        }
+
+        public void MoveToUp()
+        {
+            if (Canvas.GetTop(this) - Speed > 0)
+                Canvas.SetTop(this, Canvas.GetTop(this) - Speed);
+            else
+                Canvas.SetTop(this, 0);
+        }
+
+        public void MoveToDown()
+        {
+            if (Canvas.GetTop(this) + Speed < AppControls.MainCanvas.ActualHeight - Height)
+                Canvas.SetTop(this, Canvas.GetTop(this) + Speed);
+            else
+                Canvas.SetTop(this, AppControls.MainCanvas.ActualHeight - Height);
         }
 
         public Geometry GetHitBox()
